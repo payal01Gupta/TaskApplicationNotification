@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.taskapplication.R;
 import com.example.taskapplication.ui.viewModel.JokeViewModel;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class DemoActivity extends AppCompatActivity {
 
@@ -24,6 +26,13 @@ public class DemoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_demo2);
+
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("FCM_TOKEN", task.getResult());
+                    }
+                });
 
         textView = findViewById(R.id.textView);
         button = findViewById(R.id.button);

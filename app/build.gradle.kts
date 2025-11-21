@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -46,4 +47,11 @@ dependencies {
         implementation("com.squareup.retrofit2:retrofit:2.9.0")
         implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
+    implementation(platform("com.google.firebase:firebase-bom:34.5.0"))
+    implementation ("com.google.firebase:firebase-messaging")
+
+
+    implementation("com.google.firebase:firebase-analytics")
+    implementation ("com.google.firebase:firebase-auth")
+    implementation ("com.google.firebase:firebase-database")
 }

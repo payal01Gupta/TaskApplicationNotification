@@ -1,6 +1,7 @@
 package com.example.taskapplication.FirebaseClasses;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -13,8 +14,12 @@ import androidx.annotation.RequiresPermission;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import com.example.taskapplication.R;
+import com.example.taskapplication.worker.ApiWorker;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -25,8 +30,18 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Log.e("rrrrr","onMessgeRecieved");
 
+        if (remoteMessage.getData().size() > 0) {
+
+            String userId = remoteMessage.getData().get("userId");
+            String name = remoteMessage.getData().get("name");
+            String email = remoteMessage.getData().get("email");
+
+            scheduleApiWorker(userId, name, email);
+        }
+
+
 //         SIMPLE NOTIFICATIO
-        try {
+        /*try {
             if (remoteMessage.getNotification() != null) {
                 String title = remoteMessage.getNotification().getTitle();
                 String body = remoteMessage.getNotification().getBody();
@@ -46,29 +61,34 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 }
             }
 
-            /*// DATA NOTIFICATION
-            if (remoteMessage.getData().size() > 0) {
-                String msg = remoteMessage.getData().get("message");
-                String user = remoteMessage.getData().get("user");
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-
-                    return;
-                }
-                showNotification("Data Message", msg + " (From: " + user + ")");
-            }*/
-
-        }catch (Exception e) {
+        }
+        catch (Exception e) {
                 e.printStackTrace();
                 Log.e("rrrrr",e.getMessage());
-            }
+            }*/
         }
 
+
+    private void scheduleApiWorker(String userId, String name, String email) {
+
+        Data data = new Data.Builder()
+                .putString("userId", userId)
+                .putString("name", name)
+                .putString("email", email)
+                .build();
+
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(ApiWorker.class)
+                .setInputData(data)
+                .build();
+
+        WorkManager.getInstance(this).enqueue(request);
+    }
+
     @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
-    private void showDataNotification(String title, String message, String user) {
+    private void showDataNotification(String title, String userId, String name, String email) {
         String channelId = "my_channel";
 
-        NotificationManager nm =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
@@ -81,9 +101,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this, channelId)
-                        .setSmallIcon(R.mipmap.ic_launcher_round)
+                        .setSmallIcon(R.mipmap.ic_launcher)
                         .setContentTitle(title)
-                        .setContentText(message + "extra parameter" +user)
+                        .setContentText(userId + "extra parameter" +name + "extra" +email)
                         .setAutoCancel(true)
                         .setPriority(NotificationCompat.PRIORITY_HIGH);
 
@@ -110,7 +130,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this, channelId)
-                        .setSmallIcon(R.mipmap.ic_launcher_round)
+                        .setSmallIcon(R.mipmap.ic_launcher)
                         .setContentTitle(title)
                         .setContentText(message)
                         .setAutoCancel(true)
@@ -120,50 +140,53 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         manager.notify(999, builder.build());
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     public void handleIntent(Intent intent) {
         super.handleIntent(intent);
+        String userId = null;
+        String name = null;
+        String email = null;
 
         if (intent != null && intent.getExtras() != null) {
+
             for (String key : intent.getExtras().keySet()) {
+                Object value = intent.getExtras().get(key);
+                if(key.equalsIgnoreCase("userId") ) {
+                    if(value != null) {
+                        userId = value.toString();
+                    }
+                }
+                if(key.equalsIgnoreCase("name")){
+                    name = value.toString();
+                } else {
+                    //           showNotification(title, body);
+                }
+                if(key.equalsIgnoreCase("email")){
+                    email = value.toString();
+                }
+                  showDataNotification("Data Message", userId,name,email);
+                scheduleApiWorker(userId, name, email);
+
+            }
+
+            /*for (String key : intent.getExtras().keySet()) {
                 Object value = intent.getExtras().get(key);
                 if(key.equalsIgnoreCase("message") ) {
                     if(value != null) {
-                        String message = value.toString();
-                        showDataNotification("Data Message", message );
+                         message = value.toString();
+                        showDataNotification("Data Message", message,user);
                     }
                     break;
-                } else {
-                    showNotification(title, body);
                 }
-            }
-//            if(intent.getExtras() != null){
-//                String title = "", body = "", image = "", custombody = "";
-//                if(intent.hasExtra("gcm.notification.title")) {
-//                    title = intent.getStringExtra("gcm.notification.title");
-//                }
-//                if(intent.hasExtra("gcm.notification.body")) {
-//                    body = intent.getStringExtra("gcm.notification.body");
-//                }
-//                if(intent.hasExtra("gcm.notification.image")) {
-//                    image = intent.getStringExtra("gcm.notification.image");
-//                }
-//                if(intent.hasExtra("custombody")) {
-//                    custombody = intent.getStringExtra("custombody");
-//                }
-//                if(title != null && title.length() > 0 && body != null && body.length() > 0){
-//                    if(image != null && image.length() > 0) {
-//                        notificationUtils.showNotificationMessage(title, body, "", resultIntent, image, custombody);
-//                    } else {
-//                        notificationUtils.showNotificationMessage(title, body, "", resultIntent, "", custombody);
-//                    }
-//                    return;
-//                }
-//            }
+                if(key.equalsIgnoreCase("user")){
+                    user = value.toString();
+                    showDataNotification("Data Message", message,user);
+                 } else {
+         //           showNotification(title, body);
+                }
+            }*/
         }
-
-        String message = intent.getStringExtra("message");
-        String user = intent.getStringExtra("user");
     }
 }
 

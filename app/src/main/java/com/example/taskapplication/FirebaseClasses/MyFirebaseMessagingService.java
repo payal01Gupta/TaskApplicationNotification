@@ -32,11 +32,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         if (remoteMessage.getData().size() > 0) {
 
+            Boolean runApi = Boolean.valueOf(remoteMessage.getData().get("runApi"));
             String userId = remoteMessage.getData().get("userId");
             String name = remoteMessage.getData().get("name");
             String email = remoteMessage.getData().get("email");
 
-            scheduleApiWorker(userId, name, email);
+            scheduleApiWorker(runApi,userId, name, email);
         }
 
 
@@ -69,9 +70,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
 
 
-    private void scheduleApiWorker(String userId, String name, String email) {
+    private void scheduleApiWorker(Boolean apiRun,String userId, String name, String email) {
 
         Data data = new Data.Builder()
+                .putBoolean("runApi",apiRun)
                 .putString("userId", userId)
                 .putString("name", name)
                 .putString("email", email)
@@ -147,11 +149,18 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String userId = null;
         String name = null;
         String email = null;
+        Boolean shouldApiRun = false;
 
         if (intent != null && intent.getExtras() != null) {
 
             for (String key : intent.getExtras().keySet()) {
                 Object value = intent.getExtras().get(key);
+
+                if(key.equalsIgnoreCase("runApi")){
+                    if(value != null){
+                        shouldApiRun = Boolean.valueOf(value.toString());
+                    }
+                }
                 if(key.equalsIgnoreCase("userId") ) {
                     if(value != null) {
                         userId = value.toString();
@@ -165,8 +174,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 if(key.equalsIgnoreCase("email")){
                     email = value.toString();
                 }
-                  showDataNotification("Data Message", userId,name,email);
-                scheduleApiWorker(userId, name, email);
+        //          showDataNotification("Data Message", userId,name,email);
+                scheduleApiWorker(shouldApiRun,userId, name, email);
 
             }
 

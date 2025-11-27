@@ -49,17 +49,19 @@ public class ApiWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        Boolean runApi = getInputData().getBoolean("runApi",false);
+       // Boolean runApi = getInputData().getBoolean("runApi",false);
         String userId = getInputData().getString("userId");
         String name = getInputData().getString("name");
         String email = getInputData().getString("email");
       //  boolean shouldRunApi = Boolean.parseBoolean(runApi);
 
-        if (!runApi) {
-            return Result.success();
-        }
+//        if (!runApi) {
+//            return Result.success();
+//        }
 
             User user = new User(userId, name, email);
+
+            Log.e("rrrrr","doWork");
 
             try {
                 Response<User> response = apiService.createUser(user).execute();
@@ -88,14 +90,20 @@ public class ApiWorker extends Worker {
                     String fullJsonResponse = sb.toString();
                     Log.d("API_WORKER", "Full response: " + fullJsonResponse);
 
+
+                    Log.e("rrrrr","payal1");
+
                     // 2) Save JSON in internal storage
                     // -----------------------------
                     saveFileInternal("api_response.txt", fullJsonResponse);
 
+                    Log.e("rrrrr","payal2");
                     // -----------------------------
                     // 3) Save JSON in Downloads folder
                     // -----------------------------
                     saveFileToDownloads("api_response.txt", fullJsonResponse);
+
+                    Log.e("rrrrr","payal3");
 
                     showNotification("API Success", "File saved in Downloads");
                    // showNotification("API success", "User created" + response.body().toString());

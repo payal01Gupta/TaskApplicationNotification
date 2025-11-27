@@ -37,7 +37,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             String name = remoteMessage.getData().get("name");
             String email = remoteMessage.getData().get("email");
 
-            scheduleApiWorker(runApi,userId, name, email);
+            if(runApi){
+                scheduleApiWorker(runApi,userId, name, email);
+            }
+
         }
 
 

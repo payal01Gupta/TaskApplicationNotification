@@ -3,6 +3,9 @@ package com.example.taskapplication.ui.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -13,7 +16,10 @@ import android.widget.TextView;
 
 import com.example.taskapplication.R;
 import com.example.taskapplication.ui.viewModel.JokeViewModel;
+import com.example.taskapplication.worker.ApiWorker;
 import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.util.concurrent.TimeUnit;
 
 public class DemoActivity extends AppCompatActivity {
 
@@ -55,5 +61,25 @@ public class DemoActivity extends AppCompatActivity {
         });
 
         button.setOnClickListener(v -> viewModel.fetchJoke());
+
+        callHourlyNotificationWorker();
+    }
+
+    private void callHourlyNotificationWorker() {
+
+        PeriodicWorkRequest workRequest =
+                new PeriodicWorkRequest.Builder(
+                        ApiWorker.class,
+                        15, TimeUnit.MINUTES
+                )
+                  //      .setInitialDelay(15, TimeUnit.MINUTES) // first notification after 1 hr (optional)
+                        .build();
+
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+                "hourly_work",
+                ExistingPeriodicWorkPolicy.KEEP,
+                workRequest
+        );
+
     }
 }

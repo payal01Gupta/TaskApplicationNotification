@@ -45,19 +45,24 @@ public class ApiWorker extends Worker {
         apiService = RetrofitClient.getInstance().getApiService();
     }
 
-    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     @NonNull
     @Override
     public Result doWork() {
-       // Boolean runApi = getInputData().getBoolean("runApi",false);
+
+        showHourlyNotification("Hourly Alert", "This notification appears every time!");
+
+        return Result.success();
+
+    }
+
+    /*    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
+    @NonNull
+    @Override
+    public Result doWork() {
         String userId = getInputData().getString("userId");
         String name = getInputData().getString("name");
         String email = getInputData().getString("email");
-      //  boolean shouldRunApi = Boolean.parseBoolean(runApi);
 
-//        if (!runApi) {
-//            return Result.success();
-//        }
 
             User user = new User(userId, name, email);
             Log.e("user",user.toString());
@@ -119,7 +124,7 @@ public class ApiWorker extends Worker {
                 Log.d("API_WORKER", "error");
                 return Result.retry();
             }
-    }
+    }*/
 
     // SAVE FILE TO INTERNAL STORAGE
     // ----------------------------------------------------
@@ -190,6 +195,30 @@ public class ApiWorker extends Worker {
 
     public void getDataTest(){
         Log.e("test1","payal22");
+    }
+
+    private void showHourlyNotification(String title, String message) {
+        Context context = getApplicationContext();
+        String channelId = "my_channel";
+
+        NotificationManager manager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel =
+                    new NotificationChannel(channelId, "Hourly Notifications",
+                            NotificationManager.IMPORTANCE_DEFAULT);
+            manager.createNotificationChannel(channel);
+        }
+
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(context, channelId)
+                        .setContentTitle(title)
+                        .setContentText(message)
+                        .setSmallIcon(android.R.drawable.ic_popup_reminder)
+                        .setAutoCancel(true);
+
+        manager.notify(1001, builder.build());
     }
 }
 

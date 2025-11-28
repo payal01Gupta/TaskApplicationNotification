@@ -60,6 +60,7 @@ public class ApiWorker extends Worker {
 //        }
 
             User user = new User(userId, name, email);
+            Log.e("user",user.toString());
 
             Log.e("rrrrr","doWork");
 

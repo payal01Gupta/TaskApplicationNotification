@@ -60,6 +60,7 @@ public class ApiWorker extends Worker {
 //        }
 
             User user = new User(userId, name, email);
+            Log.e("user",user.toString());
 
             Log.e("rrrrr","doWork");
 
@@ -124,7 +125,7 @@ public class ApiWorker extends Worker {
     // ----------------------------------------------------
     private void saveFileInternal(String fileName, String content) {
         try {
-            Log.e("test","weerere");
+            Log.e("test","payalnew");
             OutputStream os = getApplicationContext().openFileOutput(fileName, Context.MODE_PRIVATE);
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os));
             writer.write(content);
@@ -134,11 +135,6 @@ public class ApiWorker extends Worker {
             Log.e("FILE_SAVE", "Internal storage save error: " + e.getMessage());
         }
     }
-
-    private void newPayal(){
-
-    }
-
 
     private void saveFileToDownloads(String fileName, String text) {
         try {
@@ -190,6 +186,10 @@ public class ApiWorker extends Worker {
 
         NotificationManagerCompat manager = NotificationManagerCompat.from(getApplicationContext());
         manager.notify(999, builder.build());
+    }
+
+    public void getDataTest(){
+        Log.e("test1","payal22");
     }
 }
 

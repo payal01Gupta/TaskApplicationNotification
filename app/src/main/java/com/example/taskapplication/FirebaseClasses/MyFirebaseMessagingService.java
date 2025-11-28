@@ -39,6 +39,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             if(runApi){
                 scheduleApiWorker(runApi,userId, name, email);
+                Log.e("test","payal");
             }
 
         }

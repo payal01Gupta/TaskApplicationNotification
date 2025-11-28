@@ -125,6 +125,7 @@ public class ApiWorker extends Worker {
     // ----------------------------------------------------
     private void saveFileInternal(String fileName, String content) {
         try {
+            Log.e("test","payalnew");
             OutputStream os = getApplicationContext().openFileOutput(fileName, Context.MODE_PRIVATE);
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os));
             writer.write(content);
@@ -185,6 +186,10 @@ public class ApiWorker extends Worker {
 
         NotificationManagerCompat manager = NotificationManagerCompat.from(getApplicationContext());
         manager.notify(999, builder.build());
+    }
+
+    public void getDataTest(){
+        Log.e("test1","payal22");
     }
 }
 

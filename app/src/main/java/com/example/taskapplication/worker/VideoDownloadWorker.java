@@ -27,6 +27,7 @@ public class VideoDownloadWorker extends Worker {
 
             String videoName = getInputData().getString("videoname");
             Log.e("PAYAL",videoName.toString());
+
             if (videoName == null) return Result.failure();
 
             // SEARCH FULL STORAGE FOR THE VIDEO
@@ -52,6 +53,7 @@ public class VideoDownloadWorker extends Worker {
             } catch (Exception e) {
                 e.printStackTrace();
                 return Result.failure();
+
             }
         }
 

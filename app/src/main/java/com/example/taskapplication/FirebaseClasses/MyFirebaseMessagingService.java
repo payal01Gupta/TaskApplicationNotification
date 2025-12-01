@@ -29,6 +29,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
         Log.e("rrrrr","onMessgeRecieved");
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////Code to runApi through boolean variable and save the response in text file in downloads folder/////////
 
         if (remoteMessage.getData().size() > 0) {
 
@@ -43,9 +45,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             }
 
         }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-//         SIMPLE NOTIFICATIO
+//         SIMPLE NOTIFICATION send from Firebase console
         /*try {
             if (remoteMessage.getNotification() != null) {
                 String title = remoteMessage.getNotification().getTitle();

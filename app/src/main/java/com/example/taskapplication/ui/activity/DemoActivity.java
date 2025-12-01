@@ -62,7 +62,7 @@ public class DemoActivity extends AppCompatActivity {
 
         button.setOnClickListener(v -> viewModel.fetchJoke());
 
-        callHourlyNotificationWorker();
+ //       callHourlyNotificationWorker();
     }
 
     private void callHourlyNotificationWorker() {

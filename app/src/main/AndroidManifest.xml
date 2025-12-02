@@ -2,9 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
 
     <application
@@ -18,7 +18,7 @@
         android:theme="@style/Theme.TaskApplication"
         tools:targetApi="31">
         <activity
-            android:name=".ui.activity.DemoActivity"
+            android:name=".ui.activity.VodDataListActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,9 +26,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.activity.DemoActivity"
+            android:exported="true">
+        </activity>
 
         <service
             android:name=".FirebaseClasses.MyFirebaseMessagingService"
+            android:exported="false">
+
+            <!--
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+            -->
+        </service>
+        <service
+            android:name=".FirebaseClasses.VideoFirebaseService"
             android:exported="false">
            <!-- <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -36,7 +50,7 @@
         </service>
 
         <service
-            android:name=".FirebaseClasses.VideoFirebaseService"
+            android:name=".FirebaseClasses.DataListFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -47,6 +61,13 @@
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="my_channel" />
 
+        <receiver
+            android:name=".Receiver.VodReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="ACTION_VOD_UPDATE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

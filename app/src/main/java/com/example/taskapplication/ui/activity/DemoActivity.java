@@ -78,7 +78,7 @@ public class DemoActivity extends AppCompatActivity {
  //       callHourlyNotificationWorker();
 
 
-        workertask();
+     //   workertask();
 
     }
 

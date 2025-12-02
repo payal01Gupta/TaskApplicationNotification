@@ -51,6 +51,7 @@ public class JokeViewModel extends ViewModel {
                 } else {
                     jokeText.setValue("Error: response failed!");
                 }
+                return null;
             }
 
             @Override

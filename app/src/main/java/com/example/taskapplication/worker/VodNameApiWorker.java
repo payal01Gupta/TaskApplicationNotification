@@ -42,22 +42,26 @@ public class VodNameApiWorker extends Worker {
         Retrofit retrofitObject = Utils.retrofitObject(getApplicationContext());
         if (retrofitObject != null) {
             ApiService service = retrofitObject.create(ApiService.class);
-            Call<List<VodStreamsCallback>> call = service.allVODStreams(AppConst.CONTENT_TYPE, "Abel57", "222333","get_vod_streams");
+            Call<List<VodStreamsCallback>> call = service.allVODStreams(AppConst.CONTENT_TYPE, "f19802025", "@f19802025","get_vod_streams");
             call.enqueue(new Callback<List<VodStreamsCallback>>() {
                 @Override
                 public void onResponse(Call<List<VodStreamsCallback>> call, Response<List<VodStreamsCallback>> response) {
                     if(response != null && response.isSuccessful()){
                         Log.e("PAYAL", "API success: " + response.body().size());
                         List<VodStreamsCallback> dataList = response.body();
+
                         if(dataList != null && !dataList.isEmpty()){
                             saveToPrefs(dataList);
                             sendBroadcast();
                         }
                         Result.success();
+                    }else{
+                        Result.failure();
                     }
-                    Log.e("PAYAL", "API failed: " + response.code());
-                    Result.failure();
+
                 }
+
+
 
                 @Override
                 public void onFailure(Call<List<VodStreamsCallback>> call, Throwable t) {
@@ -66,7 +70,7 @@ public class VodNameApiWorker extends Worker {
                 }
             });
         }
-        return Result.retry();
+        return Result.failure();
         }
 
     private void saveToPrefs(List<VodStreamsCallback> vodList) {
@@ -76,8 +80,10 @@ public class VodNameApiWorker extends Worker {
         prefs.edit().putString("vod_streams", json).apply();
     }
 
+
+
     private void sendBroadcast() {
-        Intent intent = new Intent("ACTION_VOD_UPDATE");
+        Intent intent = new Intent(AppConst.NOTIFICATION_BROADCAST);
         getApplicationContext().sendBroadcast(intent);
     }
 }

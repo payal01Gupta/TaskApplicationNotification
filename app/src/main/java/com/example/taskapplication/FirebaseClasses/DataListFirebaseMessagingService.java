@@ -1,5 +1,8 @@
 package com.example.taskapplication.FirebaseClasses;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -20,6 +23,8 @@ public class DataListFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
+        clearPrefrences();
+
         if (remoteMessage.getData().size() > 0) {
 
             String data = remoteMessage.getData().get("hitApi");
@@ -38,5 +43,43 @@ public class DataListFirebaseMessagingService extends FirebaseMessagingService {
                 WorkManager.getInstance(this).enqueue(request);
             }
         }
+    }
+
+    @Override
+    public void handleIntent(Intent intent) {
+//        super.handleIntent(intent);
+
+        clearPrefrences();
+
+        if(intent != null && intent.getExtras() != null){
+
+            String runApi="";
+            if(intent.hasExtra("hitApi")) {
+                 runApi = intent.getStringExtra("hitApi");
+            }
+            Log.e("PAYAl", runApi);
+
+            Constraints constraints = new Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build();
+
+
+            if(runApi.equalsIgnoreCase("true")){
+                OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(VodNameApiWorker.class)
+                        .setConstraints(constraints)
+                        .build();
+                WorkManager.getInstance(this).enqueue(request);
+                return;
+            }
+        }
+        super.handleIntent(intent);
+    }
+
+
+    private void clearPrefrences(){
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences("MY_PREFS", Context.MODE_PRIVATE);
+        prefs.edit().clear().apply();
+
+
     }
 }

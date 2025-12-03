@@ -1,13 +1,20 @@
 package com.example.taskapplication.ui.activity;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -17,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.taskapplication.R;
 import com.example.taskapplication.Receiver.VodReceiver;
+import com.example.taskapplication.miscellanious.AppConst;
 import com.example.taskapplication.ui.adapter.VodListAdapter;
 import com.example.taskapplication.ui.webServices.VodStreamsCallback;
 import com.example.taskapplication.worker.VodNameApiWorker;
@@ -32,6 +40,8 @@ public class VodDataListActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     VodListAdapter adapter;
     VodReceiver receiver;
+    LinearLayout ll_recyclerView;
+    TextView tv_noDataFound;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,26 +55,42 @@ public class VodDataListActivity extends AppCompatActivity {
                 });
 
         recyclerView = findViewById(R.id.recyclerView);
+        ll_recyclerView = findViewById(R.id.ll_recyclerView);
+        tv_noDataFound = findViewById(R.id.tv_noDataFound);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // initial load
         List<VodStreamsCallback> list = loadFromPrefs();
-        adapter = new VodListAdapter(list);
-        recyclerView.setAdapter(adapter);
+        if(list!=null && !list.isEmpty()) {
+            ll_recyclerView.setVisibility(VISIBLE);
+            tv_noDataFound.setVisibility(GONE);
+
+            adapter = new VodListAdapter(list);
+            recyclerView.setAdapter(adapter);
+        }else{
+            tv_noDataFound.setVisibility(VISIBLE);
+            ll_recyclerView.setVisibility(GONE);
+
+        }
+
+
 
         // register broadcast receiver
         receiver = new VodReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if ("ACTION_VOD_UPDATE".equals(intent.getAction())) {
+                if (AppConst.NOTIFICATION_BROADCAST.equals(intent.getAction())) {
                     List<VodStreamsCallback> updatedList = loadFromPrefs();
                     adapter.updateList(updatedList);
                 }
             }
         };
 
-        IntentFilter filter = new IntentFilter("ACTION_VOD_UPDATE");
-        registerReceiver(receiver, filter);
+        IntentFilter filter = new IntentFilter(AppConst.NOTIFICATION_BROADCAST);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            registerReceiver(receiver, filter, Context.RECEIVER_NOT_EXPORTED);
+        }
     }
 
     private List<VodStreamsCallback> loadFromPrefs() {

@@ -3,6 +3,10 @@ package com.example.taskapplication.ui.webServices;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
+import javax.annotation.processing.Generated;
+@Generated("jsonschema2pojo")
 public class VodStreamsCallback {
 
     @SerializedName("num")
@@ -11,33 +15,36 @@ public class VodStreamsCallback {
     @SerializedName("name")
     @Expose
     private String name;
+    @SerializedName("title")
+    @Expose
+    private String title;
+    @SerializedName("year")
+    @Expose
+    private Object year;
     @SerializedName("stream_type")
     @Expose
     private String streamType;
     @SerializedName("stream_id")
     @Expose
     private Integer streamId;
-    @SerializedName("tmdb_id")
-    @Expose
-    private Integer tmdbId;
     @SerializedName("stream_icon")
     @Expose
     private String streamIcon;
     @SerializedName("rating")
     @Expose
-    private String rating;
+    private Float rating;
     @SerializedName("rating_5based")
     @Expose
     private Float rating5based;
     @SerializedName("added")
     @Expose
     private String added;
-    @SerializedName("is_adult")
-    @Expose
-    private String isAdult;
     @SerializedName("category_id")
     @Expose
     private String categoryId;
+    @SerializedName("category_ids")
+    @Expose
+    private List<Integer> categoryIds;
     @SerializedName("container_extension")
     @Expose
     private String containerExtension;
@@ -64,6 +71,22 @@ public class VodStreamsCallback {
         this.name = name;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Object getYear() {
+        return year;
+    }
+
+    public void setYear(Object year) {
+        this.year = year;
+    }
+
     public String getStreamType() {
         return streamType;
     }
@@ -80,14 +103,6 @@ public class VodStreamsCallback {
         this.streamId = streamId;
     }
 
-    public Integer getTmdbId() {
-        return tmdbId;
-    }
-
-    public void setTmdbId(Integer tmdbId) {
-        this.tmdbId = tmdbId;
-    }
-
     public String getStreamIcon() {
         return streamIcon;
     }
@@ -96,11 +111,11 @@ public class VodStreamsCallback {
         this.streamIcon = streamIcon;
     }
 
-    public String getRating() {
+    public Float getRating() {
         return rating;
     }
 
-    public void setRating(String rating) {
+    public void setRating(Float rating) {
         this.rating = rating;
     }
 
@@ -120,20 +135,20 @@ public class VodStreamsCallback {
         this.added = added;
     }
 
-    public String getIsAdult() {
-        return isAdult;
-    }
-
-    public void setIsAdult(String isAdult) {
-        this.isAdult = isAdult;
-    }
-
     public String getCategoryId() {
         return categoryId;
     }
 
     public void setCategoryId(String categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public List<Integer> getCategoryIds() {
+        return categoryIds;
+    }
+
+    public void setCategoryIds(List<Integer> categoryIds) {
+        this.categoryIds = categoryIds;
     }
 
     public String getContainerExtension() {
@@ -159,5 +174,5 @@ public class VodStreamsCallback {
     public void setDirectSource(String directSource) {
         this.directSource = directSource;
     }
-}
 
+}

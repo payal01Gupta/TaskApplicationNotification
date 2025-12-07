@@ -68,8 +68,6 @@ public class VodNameApiWorkerOne extends Worker {
         Log.e("PAYAL", "Prefrence update");
     }
 
-
-
     private void sendBroadcast() {
         Intent intent = new Intent(AppConst.NOTIFICATION_BROADCAST);
         getApplicationContext().sendBroadcast(intent);

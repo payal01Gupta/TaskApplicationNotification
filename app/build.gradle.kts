@@ -56,4 +56,6 @@ dependencies {
     implementation ("com.google.firebase:firebase-database")
 
     implementation("androidx.work:work-runtime:2.7.0")
+
+    implementation("androidx.media:media:1.6.0") // MediaSessionCompat & Notification helper
 }

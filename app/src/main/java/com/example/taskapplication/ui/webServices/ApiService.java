@@ -1,7 +1,9 @@
 package com.example.taskapplication.ui.webServices;
 
 import com.example.taskapplication.ui.model.JokeResponse;
+import com.example.taskapplication.ui.model.MessageResponse;
 import com.example.taskapplication.ui.model.User;
+import com.example.taskapplication.ui.model.UserNew;
 
 import java.util.List;
 
@@ -27,4 +29,10 @@ public interface ApiService {
             @Query("password") String password,
             @Query("action") String getVodStreams);
 
+
+    @GET("users")
+    Call<List<UserNew>> getUsers();          // RecyclerView list
+
+    @GET("posts/1")
+    Call<MessageResponse> getMessage();   // Single text
 }

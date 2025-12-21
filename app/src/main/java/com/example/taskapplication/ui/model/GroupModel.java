@@ -1,7 +1,36 @@
 package com.example.taskapplication.ui.model;
 
 public class GroupModel {
-    String groupName;
+
+    private String groupname;
+    private boolean isGroup;   // true = group, false = server
+    private ServersModel server; // null for group
+
+    // Group constructor
+    public GroupModel(String groupname) {
+        this.groupname = groupname;
+        this.isGroup = true;
+    }
+
+    // Server constructor
+    public GroupModel(ServersModel server) {
+        this.server = server;
+        this.groupname = server.getServerName();
+        this.isGroup = false;
+    }
+
+    public boolean isGroup() {
+        return isGroup;
+    }
+
+    public String getGroupname() {
+        return groupname;
+    }
+
+    public ServersModel getServer() {
+        return server;
+    }
+ /*   String groupName;
     public boolean hasServers;
 
     public GroupModel(String groupName, boolean hasServers) {
@@ -23,5 +52,5 @@ public class GroupModel {
 
     public void setHasServers(boolean hasServers) {
         this.hasServers = hasServers;
-    }
+    }*/
 }

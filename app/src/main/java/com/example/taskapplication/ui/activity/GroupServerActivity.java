@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.taskapplication.R;
 import com.example.taskapplication.ui.adapter.GroupAdapter;
 import com.example.taskapplication.ui.model.GroupModel;
+import com.example.taskapplication.ui.model.ServersModel;
 import com.example.taskapplication.ui.viewModel.ServerViewModel;
 
 import java.util.ArrayList;
@@ -42,7 +43,28 @@ public class GroupServerActivity extends AppCompatActivity {
     }
 
     private void initViewModel() {
+
         viewModel.getGroupServerList().observe(this, map -> {
+
+            List<GroupModel> finalList = new ArrayList<>();
+
+            for (String key : map.keySet()) {
+
+                List<ServersModel> servers = map.get(key);
+
+                if (key.equals("Individual")) {
+                    for (ServersModel server : servers) {
+                        finalList.add(new GroupModel(server));
+                    }
+                } else {
+                    finalList.add(new GroupModel(key));
+                }
+            }
+
+            adapter.updateList(finalList);
+        });
+
+        /*viewModel.getGroupServerList().observe(this, map -> {
 
             List<GroupModel> groupItems = new ArrayList<>();
 
@@ -52,6 +74,6 @@ public class GroupServerActivity extends AppCompatActivity {
             }
 
             adapter.updateList(groupItems);
-        });
+        });*/
     }
 }

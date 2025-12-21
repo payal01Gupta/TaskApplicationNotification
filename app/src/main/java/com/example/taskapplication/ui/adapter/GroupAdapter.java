@@ -44,15 +44,15 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder>{
     public void onBindViewHolder(@NonNull ViewHolder h, int pos) {
 
         GroupModel item = list.get(pos);
-        h.tvName.setText(item.getGroupName());
+        h.tvName.setText(item.getGroupname());
 
         // arrow show only if servers exist
-        h.arrow.setVisibility(item.hasServers ? View.VISIBLE : View.GONE);
+        h.arrow.setVisibility(item.isGroup() ? View.VISIBLE : View.GONE);
 
         h.itemView.setOnClickListener(v -> {
-            if (item.isHasServers()) {
+            if (item.isGroup()) {
                 Intent intent = new Intent(context, ServerListActivity.class);
-                intent.putExtra("group", item.getGroupName());
+                intent.putExtra("group", item.getGroupname());
                 context.startActivity(intent);
             }
         });

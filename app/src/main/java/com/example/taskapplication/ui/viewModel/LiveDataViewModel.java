@@ -2,10 +2,15 @@ package com.example.taskapplication.ui.viewModel;
 
 import androidx.lifecycle.ViewModel;
 
+import com.example.taskapplication.ui.model.CategoriesModel;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class LiveDataViewModel extends ViewModel {
@@ -45,16 +50,47 @@ public class LiveDataViewModel extends ViewModel {
             "  }\n" +
             "}";
 
+    List<CategoriesModel> listSports = new ArrayList<>();
+    List<CategoriesModel> listMovies = new ArrayList<>();
+    List<CategoriesModel> listNews = new ArrayList<>();
     JSONObject jsonObject;
     {
         try {
-                jsonObject = new JSONObject(response);
-               JSONObject jsonObject1= jsonObject.getJSONObject("categories");
-               for(int i=0;i<jsonObject1.length();i++){
+               jsonObject = new JSONObject(response);
+               JSONObject jsonObject1 = jsonObject.getJSONObject("categories");
+               JSONArray sportsJsonArray = jsonObject1.getJSONArray("Sports");
+               JSONArray moviesJsonArray = jsonObject1.getJSONArray("Movies");
+               JSONArray newsJsonArray = jsonObject1.getJSONArray("News");
 
+               for(int i=0 ; i<sportsJsonArray.length(); i++){
+                JSONObject arrayJSONObject = sportsJsonArray.getJSONObject(i);
+
+                int channelId = arrayJSONObject.getInt("channel_id");
+                String channelName = arrayJSONObject.getString("channel_name");
+                Boolean isHD = arrayJSONObject.getBoolean("is_hd");
+
+                 listSports.add(new CategoriesModel(channelId,channelName,isHD));
                }
-            //   JSONArray jsonArray=jsonObject1.getJSONArray("Sports");
 
+            for(int i=0; i<moviesJsonArray.length(); i++){
+              JSONObject moviesJsonObject = moviesJsonArray.getJSONObject(i);
+
+              int channelId = moviesJsonObject.getInt("channel_id");
+              String channelName = moviesJsonObject.getString("channel_name");
+              Boolean isHD = moviesJsonObject.getBoolean("is_hd");
+
+              listMovies.add(new CategoriesModel(channelId,channelName,isHD));
+            }
+
+            for(int i=0; i<newsJsonArray.length(); i++){
+                JSONObject newsJsonObject = newsJsonArray.getJSONObject(i);
+
+                int channelId = newsJsonObject.getInt("channel_id");
+                String channelName = newsJsonObject.getString("channel_name");
+                Boolean isHD = newsJsonObject.getBoolean("is_hd");
+
+                listNews.add(new CategoriesModel(channelId,channelName,isHD));
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

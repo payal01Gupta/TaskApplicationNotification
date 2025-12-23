@@ -60,7 +60,6 @@ public class GroupServerActivity extends AppCompatActivity {
                     finalList.add(new GroupModel(key));
                 }
             }
-
             adapter.updateList(finalList);
         });
 

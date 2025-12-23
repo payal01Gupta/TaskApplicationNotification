@@ -3,19 +3,17 @@ package com.example.taskapplication.ui.model;
 public class GroupModel {
 
     private String groupname;
-    private boolean isGroup;   // true = group, false = server
-    private ServersModel server; // null for group
+    private boolean isGroup;
+    private ServersModel server;
 
-    // Group constructor
     public GroupModel(String groupname) {
         this.groupname = groupname;
         this.isGroup = true;
     }
 
-    // Server constructor
     public GroupModel(ServersModel server) {
         this.server = server;
-        this.groupname = server.getServerName();
+      //  this.groupname = server.getServerName();
         this.isGroup = false;
     }
 

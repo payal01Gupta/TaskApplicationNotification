@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.taskapplication.R;
 import com.example.taskapplication.ui.activity.ServerListActivity;
 import com.example.taskapplication.ui.model.GroupModel;
+import com.example.taskapplication.ui.model.ServersModel;
 
 import java.util.List;
 
@@ -44,9 +45,13 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder>{
     public void onBindViewHolder(@NonNull ViewHolder h, int pos) {
 
         GroupModel item = list.get(pos);
-        h.tvName.setText(item.getGroupname());
+        if(item.isGroup()) {
+            h.tvName.setText(item.getGroupname());
+        }else{
+            ServersModel serversModel=item.getServer();
+            h.tvName.setText(serversModel.getServerName());
+        }
 
-        // arrow show only if servers exist
         h.arrow.setVisibility(item.isGroup() ? View.VISIBLE : View.GONE);
 
         h.itemView.setOnClickListener(v -> {

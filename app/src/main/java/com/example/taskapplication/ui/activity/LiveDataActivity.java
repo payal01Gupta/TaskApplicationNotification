@@ -50,7 +50,7 @@ public class LiveDataActivity extends AppCompatActivity {
                     List<String> list = new ArrayList<>(keyList);
 
                     Collection<List<CategoriesModel>> valueList = stringListMap.values();
-                    ArrayList<List<CategoriesModel>> list3=new ArrayList<>(valueList);
+                    ArrayList<List<CategoriesModel>> list3 = new ArrayList<>(valueList);
 
                     categoriesAdapter.updateList(list,list3);
                 }

@@ -55,7 +55,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
         if(list1.get(position).equalsIgnoreCase("News")){
             count = valueList.size();
         }
-        holder.tvCategoryCount.setText(count);
+        holder.tvCategoryCount.setText(String.valueOf(count));
 
     }
 

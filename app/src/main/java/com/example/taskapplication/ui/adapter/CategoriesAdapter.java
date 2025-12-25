@@ -13,22 +13,24 @@ import com.example.taskapplication.R;
 import com.example.taskapplication.ui.model.CategoriesModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.ViewHolder>{
     List<CategoriesModel> list = new ArrayList<>();
-    List<String> list1 = new ArrayList<>();
+    List<String> keyList = new ArrayList<>();
+    Map<String, List<CategoriesModel>> mapList= new HashMap<>();
 
-   ArrayList<List<CategoriesModel>> valueList = new ArrayList<>();
     int count;
     Context context;
     public CategoriesAdapter(List<CategoriesModel> list, Context context) {
         this.list = list;
         this.context = context;
     }
-    public void updateList(List<String> newList, ArrayList<List<CategoriesModel>> valueList) {
-        this.list1 = newList;
-        this.valueList= valueList;
+    public void updateList(List<String> keyList, Map<String, List<CategoriesModel>> mapList) {
+        this.keyList = keyList;
+        this.mapList= mapList;
         notifyDataSetChanged();
     }
 
@@ -42,26 +44,18 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        int count = 0;
-        String title = list1.get(position);
+
+        String title = keyList.get(position);
         holder.tvCategoryName.setText(title);
 
-        if(list1.get(position).equalsIgnoreCase("Sports")){
-            count = valueList.size();
-        }
-        if(list1.get(position).equalsIgnoreCase("Movies")){
-            count = valueList.size();
-        }
-        if(list1.get(position).equalsIgnoreCase("News")){
-            count = valueList.size();
-        }
-        holder.tvCategoryCount.setText(String.valueOf(count));
+        List<CategoriesModel> valueList = mapList.get(title);
+        holder.tvCategoryCount.setText(valueList.size()+"");
 
     }
 
     @Override
     public int getItemCount() {
-        return list1.size();
+        return keyList.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

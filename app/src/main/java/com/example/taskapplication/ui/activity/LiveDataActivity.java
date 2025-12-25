@@ -41,18 +41,16 @@ public class LiveDataActivity extends AppCompatActivity {
         categoriesRecyclerView.setAdapter(categoriesAdapter);
 
         liveDataViewModel = new ViewModelProvider(LiveDataActivity.this).get(LiveDataViewModel.class);
+        liveDataViewModel.parseJSON();
         initViewModel();
     }
 
     private void initViewModel(){
         liveDataViewModel.getCategoriesMapList().observe(this,stringListMap ->{
-                    Set<String> keyList = stringListMap.keySet();
-                    List<String> list = new ArrayList<>(keyList);
+                    Set<String> keySet = stringListMap.keySet();
+                    List<String> keyList = new ArrayList<>(keySet);
 
-                    Collection<List<CategoriesModel>> valueList = stringListMap.values();
-                    ArrayList<List<CategoriesModel>> list3 = new ArrayList<>(valueList);
-
-                    categoriesAdapter.updateList(list,list3);
+                    categoriesAdapter.updateList(keyList,stringListMap);
                 }
            );
     }

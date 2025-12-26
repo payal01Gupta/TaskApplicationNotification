@@ -1,5 +1,7 @@
 package com.example.taskapplication.ui.viewModel;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -114,6 +116,18 @@ public class LiveDataViewModel extends ViewModel {
             "  ]\n" +
             "}";
 
+    String response3 = "{\n" +
+            "\"addresses\": [\n" +
+            "{ \"city\": \"New York\", \"zip\": \"10001\" },\n" +
+            "{ \"city\": \"Los Angeles\", \"zip\": \"90001\" }\n" +
+            "],\n" +
+            "\"contacts\": [\n" +
+            "{ \"type\": \"email\", \"value\": \"a@test.com\" },\n" +
+            "{ \"type\": \"phone\", \"value\": \"1234567890\" }\n" +
+            "],\n" +
+            "\"active\": true\n" +
+            "}";
+
     List<CategoriesModel> listSports = new ArrayList<>();
     List<CategoriesModel> listMovies = new ArrayList<>();
     List<CategoriesModel> listNews = new ArrayList<>();
@@ -171,13 +185,43 @@ public class LiveDataViewModel extends ViewModel {
             int pPrice = (int) jsonObject1.get("price");
 
             JSONArray jsonArray1 = jsonObject1.getJSONArray("sellers");
-
-
+            for(int j=0; j<jsonArray1.length(); j++){
+                JSONObject jsonObject2 = jsonArray1.getJSONObject(j);
+                String sellerId = jsonObject2.getString("sellerId").toString();
+                String sellerName = jsonObject2.getString("name").toString();
+                int rating = jsonObject2.getInt("rating");
             }
+          }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void parsingJson2(){
+        try {
+            JSONObject jsonObject = new JSONObject(response3);
+            JSONArray addressesJsonArray = jsonObject.getJSONArray("addresses");
+            for(int i=0; i<addressesJsonArray.length(); i++){
+                JSONObject jsonObject1 = addressesJsonArray.getJSONObject(i);
+                String city = jsonObject1.get("city").toString();
+                String zip = jsonObject1.get("zip").toString();
+                Log.e("Parsing array: addresses","city: "+city +" \n"+"zip: " +zip);
+            }
+
+            JSONArray contactsJsonArray = jsonObject.getJSONArray("contacts");
+            for(int i=0; i<contactsJsonArray.length(); i++){
+                JSONObject jsonObject1 = contactsJsonArray.getJSONObject(i);
+                String type = jsonObject1.get("type").toString();
+                String value = jsonObject1.get("value").toString();
+                Log.e("Parsing array: contacts", "type: "+type +"\n " +value);
+            }
+
+            Boolean isActive = (Boolean) jsonObject.get("active");
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
 //    public void parseJSON(){
